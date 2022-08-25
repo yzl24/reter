@@ -30,6 +30,7 @@ jobs:
           author: GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>
           commit-message: "chore: bump version metadata for ${{ github.ref }}"
           title: "chore: bump version metadata for ${{ github.ref }}"
+          body: The version metadata was not updated before release, it has been corrected when building dist, yet please update the code.
           branch: bump-version
           base: ${{ github.event.release.target_commitish }}
 
@@ -50,7 +51,7 @@ jobs:
           repository_url: https://test.pypi.org/legacy/
 
       - name: Publish to PyPI
-        if: github.event.release.released
+        if: "github.event.release.released"
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
