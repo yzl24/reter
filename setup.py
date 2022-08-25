@@ -42,7 +42,7 @@ else:
     pypi_classifiers.append('Development Status :: 5 - Production/Stable')
 
 setup(
-    name='featureprobe-server-sdk-python',
+    name='fasfdasjdhfbdksfh',
     version=featureprobe.__version__,
 
     author='FeatureProbe',
