@@ -31,7 +31,7 @@ jobs:
           commit-message: "chore: bump version metadata for ${{ github.ref }}"
           title: "chore: bump version metadata for ${{ github.ref }}"
           branch: bump-version
-          base: github.event.release.target_commitish
+          base: ${{ github.event.release.target_commitish }}
 
       - name: Install dependencies
         run: |
