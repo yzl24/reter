@@ -1,0 +1,55 @@
+name: "Release to PyPI & TestPyPI"
+
+on:
+  release:
+    types:
+      - published
+      - prereleased
+
+jobs:
+  build-and-publish:
+    name: Build Python distribution and publish to PyPI & TestPyPI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.5
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.5'
+
+      - name: Check version metadata is equal to release version
+        run: |
+          python .github/tools/check_metadata.py ${{ github.ref }}
+
+      - name: PR for bumping version metadata
+        uses: peter-evans/create-pull-request@v3
+        with:
+          author: GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>
+          commit-message: "chore: bump version metadata for " ${{ github.ref }}
+          title: "chore: bump version metadata for " ${{ github.ref }}
+          branch: bump-version
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade setuptools wheel
+          pip install -r requirements.txt
+
+      - name: Build a binary wheel and a source tarball
+        run: |
+          python setup.py sdist bdist_wheel
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+
+      - name: Publish to PyPI
+        if: contains(github.ref, 'refs/tags/')
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
