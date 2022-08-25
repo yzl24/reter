@@ -18,7 +18,7 @@ __license__ = 'Apache 2.0'
 
 # PEP440 spec:
 # [N!]N(.N)*[{a|b|rc}N][.postN][.devN]
-__version__ = '1.0.0'
+__version__ = '1.1.1b4'
 
 
 # --------------- API --------------- #
